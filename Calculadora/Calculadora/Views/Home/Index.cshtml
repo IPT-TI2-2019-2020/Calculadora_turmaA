@@ -1,8 +1,83 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+   ViewData["Title"] = "Calculadora";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+   <h1 class="display-4">Calculadora</h1>
+
+
+   <form method="post">
+
+      <table border="1">
+         <tr>
+            <td colspan="5">
+               <input type="text" readonly="readonly" value="0" name="visor" />
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <input type="submit" value="7" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="8" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="9" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value=":" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="+/-" name="bt" class="btn" />
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <input type="submit" value="4" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="5" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="6" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="x" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="C" name="bt" class="btn" />
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <input type="submit" value="1" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="2" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="3" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="-" name="bt" class="btn" />
+            </td>
+            <td rowspan="2">
+               <input type="submit" value="=" name="bt" class="btn" />
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2">
+               <input type="submit" value="0" name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="," name="bt" class="btn" />
+            </td>
+            <td>
+               <input type="submit" value="+" name="bt" class="btn" />
+            </td>
+         </tr>
+      </table>
+
+   </form>
+
 </div>
