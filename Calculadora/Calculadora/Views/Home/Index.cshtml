@@ -8,10 +8,15 @@
 
    <form method="post">
 
+      <!--  adicionar o efeito de 'memória' ao HTTP -->
+      <input type="hidden" value="@ViewBag.PrimeiroOperando" name="primeiroOperando" />
+      <input type="hidden" value="@ViewBag.Operador" name="operador" />
+
+
       <table border="1">
          <tr>
             <td colspan="5">
-               <input type="text" readonly="readonly" value="0" name="visor" />
+               <input type="text" readonly="readonly" value="@ViewBag.Visor" name="visor" />
             </td>
          </tr>
          <tr>
