@@ -16,7 +16,10 @@ namespace Calculadora.Controllers {
       }
 
 
-
+      /// <summary>
+      /// invocação da View inicial do nosso projeto
+      /// </summary>
+      /// <returns></returns>
       [HttpGet]
       public IActionResult Index() {
 
@@ -27,8 +30,17 @@ namespace Calculadora.Controllers {
       }
 
 
+      /// <summary>
+      /// Apresentação da calculadora
+      /// </summary>
+      /// <param name="visor">apresenta os números escritos na calculadora e o resultado das operações realizadas</param>
+      /// <param name="bt">recolhe a escolha do utilizador perante os diversos botões da calculadora</param>
+      /// <param name="primeiroOperando">assegura o efeito de 'memória' do HTTP: guarda o 'primeiro operando' necessário para as operações</param>
+      /// <param name="operador">assegura o efeito de 'memória' do HTTP: guarda o 'operador' necessário para a operação aritmética</param>
+      /// <param name="limpaVisor">especifica se o Visor deve ser limpo, ou não</param>
+      /// <returns></returns>
       [HttpPost]
-      public IActionResult Index(string visor, string bt, string primeiroOperando, string operador) {
+      public IActionResult Index(string visor, string bt, string primeiroOperando, string operador, string limpaVisor) {
 
          // filtrar o conteúdo da variável 'bt'
          switch (bt) {
@@ -43,9 +55,14 @@ namespace Calculadora.Controllers {
             case "9":
             case "0":
                // processar os algarismos
-               if (visor == "0") visor = bt;
+               if (visor == "0" || limpaVisor == "sim") visor = bt;
                else visor += bt; // visor = visor + bt;
 
+               // ativar o 'serviço' de 'memória' do HTTP
+               ViewBag.PrimeiroOperando = primeiroOperando;
+               ViewBag.Operador = operador;
+               // assinalar q o visor não deve ser limpo
+               ViewBag.LimpaVisor = "nao";
                break;
 
             case "+/-":
@@ -53,36 +70,83 @@ namespace Calculadora.Controllers {
                visor = Convert.ToDouble(visor) * -1 + "";
                // outra hipótese, seria o processamento de strings
                // dentro do valor do  'visor' -> .StartsWith() , .Substring() , .Length
+
+               // ativar o 'serviço' de 'memória' do HTTP
+               ViewBag.PrimeiroOperando = primeiroOperando;
+               ViewBag.Operador = operador;
+               // assinalar q o visor não deve ser limpo
+               ViewBag.LimpaVisor = "nao";
                break;
 
             case ",":
                // processar o separador da parte inteira da decimal
                if (!visor.Contains(",")) visor += ",";
-
+               // ativar o 'serviço' de 'memória' do HTTP
+               ViewBag.PrimeiroOperando = primeiroOperando;
+               ViewBag.Operador = operador;
+               // assinalar q o visor não deve ser limpo
+               ViewBag.LimpaVisor = "nao";
                break;
 
             case "+":
             case "-":
             case "x":
             case ":":
+            case "=":
                // processar os 'operadores'
+               // 
+               // -123,8 + 5 x
 
                if (operador == null) {
-                  // garantir o efeito de 'memória' no HTTP
+                  // é a primeira vez que se seleciona um 'operador'
+                  // ativar o 'serviço' de 'memória' do HTTP
                   ViewBag.PrimeiroOperando = visor;
                   ViewBag.Operador = bt;
+                  // dar ordem de 'limpar' o visor
+                  ViewBag.LimpaVisor = "sim";
                }
                else {
-                  ;
+                  // já carreguei pelo menos uma segunda vez no sinal de operador
+                  double auxPrimeiroOperando = Convert.ToDouble(primeiroOperando);
+                  double auxSegundoOperando = Convert.ToDouble(visor);
+
+                  // excutar a operação
+                  switch (operador) {
+                     case "+":
+                        visor = auxPrimeiroOperando + auxSegundoOperando + "";
+                        break;
+                     case "-":
+                        visor = auxPrimeiroOperando - auxSegundoOperando + "";
+                        break;
+                     case "x":
+                        visor = auxPrimeiroOperando * auxSegundoOperando + "";
+                        break;
+                     case ":":
+                        visor = auxPrimeiroOperando / auxSegundoOperando + "";
+                        break;
+                  }
+                  // ativar o 'serviço' de 'memória' do HTTP
+                  ViewBag.PrimeiroOperando = visor;
+                  ViewBag.Operador = bt;
+                  // limpar o ecrã
+                  ViewBag.LimpaVisor = "sim";
                }
 
-               // falta dar ordem para limpar o ecrã (visor)
-
-
-
-
+               // trata o caso particular do sinal de '='
+               if (bt == "=") {
+                  // anular o efeito dos operadores
+                  ViewBag.Operador = null;
+               }
                break;
 
+            case "C":
+               // desativar o 'serviço' de 'memória' do HTTP
+               ViewBag.PrimeiroOperando = null;
+               ViewBag.Operador = null;
+               // limpar o ecrã
+               ViewBag.LimpaVisor = "sim";
+               visor = "0";
+               break;
 
          } // switch(bt)
 
